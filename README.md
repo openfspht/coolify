@@ -9,29 +9,34 @@
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-Apache--2.0-0B3B36" alt="Apache-2.0"></a>
 </p>
 
-[`compose.yaml`](compose.yaml) describes the demonstration environment served under `openfsp.org`, deployed with
-[Coolify](https://coolify.io). It runs the images published by [openfspht/openfsp](https://github.com/openfspht/openfsp)
-and [openfspht/demo](https://github.com/openfspht/demo). The gateway serves the `test` environment and reaches simulated
-payment services only.
+Two compose files describe the demonstration environment served under `openfsp.org`, each deployed as its own
+[Coolify](https://coolify.io) service:
+
+- [`openfsp/compose.yaml`](openfsp/compose.yaml): the gateway, the simulator, the validator and their interfaces, from
+  the images of [openfspht/openfsp](https://github.com/openfspht/openfsp).
+- [`demo/compose.yaml`](demo/compose.yaml): the demonstration shop of [openfspht/demo](https://github.com/openfspht/demo),
+  which reaches the gateway over its public address as any merchant application would.
+
+The gateway serves the `test` environment and reaches simulated payment services only.
 
 ## Services
 
-| Service | Image | Address |
+| Service | Stack | Address |
 |---|---|---|
-| `shop` | `openfsp/demo` | https://demo.openfsp.org |
-| `gateway` | `openfsp/gateway` | https://gateway.openfsp.org |
-| `console` | `openfsp/console` | https://console.openfsp.org |
-| `simulator-ui` | `openfsp/simulator-ui` | https://simulator.openfsp.org |
-| `simulator` | `openfsp/simulator` | https://simulator-api.openfsp.org |
-| `validator-ui` | `openfsp/validator-ui` | https://validator.openfsp.org |
-| `validator` | `openfsp/validator` | internal |
-| `postgres` | `postgres` | internal |
+| `shop` | `demo` | https://demo.openfsp.org |
+| `gateway` | `openfsp` | https://gateway.openfsp.org |
+| `console` | `openfsp` | https://console.openfsp.org |
+| `simulator-ui` | `openfsp` | https://simulator.openfsp.org |
+| `simulator` | `openfsp` | https://simulator-api.openfsp.org |
+| `validator-ui` | `openfsp` | https://validator.openfsp.org |
+| `validator` | `openfsp` | internal |
+| `postgres` | `openfsp` | internal |
 
 Coolify maps each address to its service. The addresses are proxied `A` records of the `openfsp.org` zone.
 
 ## Variables
 
-These values are set on the Coolify service and never committed.
+These values are set on the Coolify services and never committed. `OPENFSP_DEMO_API_KEY` is set on both.
 
 | Variable | Content |
 |---|---|
@@ -42,7 +47,7 @@ These values are set on the Coolify service and never committed.
 
 ## Update
 
-Change the image tags in `compose.yaml`, then redeploy the service in Coolify. Dependabot proposes the tag changes.
+Change the image tags in the compose file, then redeploy its service in Coolify. Dependabot proposes the tag changes.
 
 ## License
 

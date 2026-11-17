@@ -31,5 +31,8 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
-      - run: docker compose -f compose.yaml config --quiet
-      - run: docker compose -f compose.yaml pull --quiet
+      - run: |
+          for stack in openfsp demo; do
+            docker compose -f "$stack/compose.yaml" config --quiet
+            docker compose -f "$stack/compose.yaml" pull --quiet
+          done

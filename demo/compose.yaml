@@ -1,0 +1,8 @@
+services:
+  shop:
+    image: openfsp/demo:0.1.0
+    environment:
+      OPENFSP_BASE_URL: https://gateway.openfsp.org
+      OPENFSP_API_KEY: ${OPENFSP_DEMO_API_KEY}
+      SHOP_WEBHOOK_URL: https://demo.openfsp.org/webhooks/openfsp
+      SHOP_PUBLIC_URL: https://demo.openfsp.org
