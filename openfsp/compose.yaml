@@ -41,6 +41,7 @@ services:
       SPRING_DATASOURCE_PASSWORD: ${SERVICE_PASSWORD_POSTGRES}
       OPENFSP_ADMIN_TOKEN: ${OPENFSP_ADMIN_TOKEN}
       OPENFSP_BOOTSTRAP_KEY: ${OPENFSP_DEMO_API_KEY}
+      OPENFSP_CONFORMANCE_ENABLED: "true"
       SPRING_APPLICATION_JSON: '{"openfsp":{"public-base-url":"https://gateway.openfsp.org","providers":{"mock_moncash":{"secondary-url":"https://simulator-api.openfsp.org/mock_moncash/Moncash-middleware"}},"webhooks":{"endpoints":{"demo-shop":{"url":"https://demo.openfsp.org/webhooks/openfsp"}}}}}'
     healthcheck:
       test:
