@@ -1,0 +1,77 @@
+services:
+  postgres:
+    image: postgres:18-alpine
+    environment:
+      POSTGRES_DB: openfsp
+      POSTGRES_USER: openfsp
+      POSTGRES_PASSWORD: ${SERVICE_PASSWORD_POSTGRES}
+    volumes:
+      - postgres-data:/var/lib/postgresql
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "openfsp"]
+      interval: 5s
+      retries: 30
+
+  simulator:
+    image: openfsp/simulator:0.1.0
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+      SPRING_APPLICATION_JSON: '{"openfsp":{"simulator":{"public-base-url":"https://simulator-api.openfsp.org","operators":{"mock_openfsp":{"return-url":"https://gateway.openfsp.org/return/mock_openfsp"},"mock_moncash":{"return-url":"https://gateway.openfsp.org/return/mock_moncash"},"mock_natcash":{"return-url":"https://gateway.openfsp.org/return/mock_natcash"}}}}}'
+
+  gateway:
+    image: openfsp/gateway:0.1.0
+    environment:
+      SPRING_PROFILES_ACTIVE: development,docker
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/openfsp
+      SPRING_DATASOURCE_USERNAME: openfsp
+      SPRING_DATASOURCE_PASSWORD: ${SERVICE_PASSWORD_POSTGRES}
+      OPENFSP_ADMIN_TOKEN: ${OPENFSP_ADMIN_TOKEN}
+      OPENFSP_BOOTSTRAP_KEY: ${OPENFSP_DEMO_API_KEY}
+      SPRING_APPLICATION_JSON: '{"openfsp":{"public-base-url":"https://gateway.openfsp.org","providers":{"mock_moncash":{"secondary-url":"https://simulator-api.openfsp.org/mock_moncash/Moncash-middleware"}}}}'
+    depends_on:
+      postgres:
+        condition: service_healthy
+      simulator:
+        condition: service_started
+
+  console:
+    image: openfsp/console:0.1.0
+    depends_on: [gateway]
+
+  simulator-ui:
+    image: openfsp/simulator-ui:0.1.0
+    depends_on: [simulator]
+
+  validator:
+    image: openfsp/validator:0.1.0
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/openfsp
+      SPRING_DATASOURCE_USERNAME: openfsp
+      SPRING_DATASOURCE_PASSWORD: ${SERVICE_PASSWORD_POSTGRES}
+      OPENFSP_VALIDATOR_DEVELOPMENT_MODE: "true"
+      OPENFSP_VALIDATOR_BEHIND_TRUSTED_PROXY: "true"
+      OPENFSP_VALIDATOR_SIMULATOR_DERIVATION_KEY: ${OPENFSP_VALIDATOR_DERIVATION_KEY}
+      OPENFSP_VALIDATOR_ATTESTATION_PUBLIC_URL: https://validator.openfsp.org
+    depends_on:
+      postgres:
+        condition: service_healthy
+      simulator:
+        condition: service_started
+
+  validator-ui:
+    image: openfsp/validator-ui:0.1.0
+    depends_on: [validator]
+
+  shop:
+    image: openfsp/demo:0.1.0
+    environment:
+      OPENFSP_BASE_URL: http://gateway:8080
+      OPENFSP_ALLOW_PLAIN_HTTP: "true"
+      OPENFSP_API_KEY: ${OPENFSP_DEMO_API_KEY}
+      SHOP_WEBHOOK_URL: http://shop:3000/webhooks/openfsp
+      SHOP_PUBLIC_URL: https://demo.openfsp.org
+    depends_on: [gateway]
+
+volumes:
+  postgres-data:
