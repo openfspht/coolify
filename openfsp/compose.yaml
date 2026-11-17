@@ -13,14 +13,18 @@ services:
       retries: 30
 
   simulator:
-    image: openfsp/simulator:0.1.0
+    image: openfsp/simulator:latest
     environment:
+      SENTRY_DSN: ${SENTRY_DSN_BACKEND}
+      SENTRY_ENVIRONMENT: production
       SPRING_PROFILES_ACTIVE: docker
       SPRING_APPLICATION_JSON: '{"openfsp":{"simulator":{"public-base-url":"https://simulator-api.openfsp.org","operators":{"mock_openfsp":{"return-url":"https://gateway.openfsp.org/return/mock_openfsp"},"mock_moncash":{"return-url":"https://gateway.openfsp.org/return/mock_moncash"},"mock_natcash":{"return-url":"https://gateway.openfsp.org/return/mock_natcash"}}}}}'
 
   gateway:
-    image: openfsp/gateway:0.1.0
+    image: openfsp/gateway:latest
     environment:
+      SENTRY_DSN: ${SENTRY_DSN_BACKEND}
+      SENTRY_ENVIRONMENT: production
       SPRING_PROFILES_ACTIVE: development,docker
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/openfsp
       SPRING_DATASOURCE_USERNAME: openfsp
@@ -35,16 +39,24 @@ services:
         condition: service_started
 
   console:
-    image: openfsp/console:0.1.0
+    image: openfsp/console:latest
+    environment:
+      SENTRY_DSN: ${SENTRY_DSN_FRONTEND}
+      SENTRY_ENVIRONMENT: production
     depends_on: [gateway]
 
   simulator-ui:
-    image: openfsp/simulator-ui:0.1.0
+    image: openfsp/simulator-ui:latest
+    environment:
+      SENTRY_DSN: ${SENTRY_DSN_FRONTEND}
+      SENTRY_ENVIRONMENT: production
     depends_on: [simulator]
 
   validator:
-    image: openfsp/validator:0.1.0
+    image: openfsp/validator:latest
     environment:
+      SENTRY_DSN: ${SENTRY_DSN_BACKEND}
+      SENTRY_ENVIRONMENT: production
       SPRING_PROFILES_ACTIVE: docker
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/openfsp
       SPRING_DATASOURCE_USERNAME: openfsp
@@ -60,7 +72,10 @@ services:
         condition: service_started
 
   validator-ui:
-    image: openfsp/validator-ui:0.1.0
+    image: openfsp/validator-ui:latest
+    environment:
+      SENTRY_DSN: ${SENTRY_DSN_FRONTEND}
+      SENTRY_ENVIRONMENT: production
     depends_on: [validator]
 
 volumes:

@@ -44,10 +44,13 @@ These values are set on the Coolify services and never committed. `OPENFSP_DEMO_
 | `OPENFSP_ADMIN_TOKEN` | Argon2id hash of the console token, produced by the gateway `hash` command |
 | `OPENFSP_DEMO_API_KEY` | `ofsp_test_` key registered by the gateway at startup and used by the shop |
 | `OPENFSP_VALIDATOR_DERIVATION_KEY` | 256 random bits in base64 |
+| `SENTRY_DSN_BACKEND`, `SENTRY_DSN_FRONTEND` | Sentry DSN of the services and of their interfaces, on the `openfsp` stack |
+| `SENTRY_DSN_DEMO` | Sentry DSN of the shop, on the `demo` stack |
 
 ## Update
 
-Change the image tags in the compose file, then redeploy its service in Coolify. Dependabot proposes the tag changes.
+Both stacks run the `latest` images. Coolify deploys each one from this repository: redeploy a stack to pull the images
+of a new release. A change to a compose file is deployed on push.
 
 ## License
 
