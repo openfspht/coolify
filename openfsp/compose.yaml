@@ -96,6 +96,8 @@ services:
       OPENFSP_VALIDATOR_DEVELOPMENT_MODE: "true"
       OPENFSP_VALIDATOR_BEHIND_TRUSTED_PROXY: "true"
       OPENFSP_VALIDATOR_SIMULATOR_DERIVATION_KEY: ${OPENFSP_VALIDATOR_DERIVATION_KEY}
+      OPENFSP_VALIDATOR_PUBLIC_URL: https://validator.openfsp.org
+      OPENFSP_VALIDATOR_SIMULATOR_PUBLIC_URL: https://simulator-api.openfsp.org
       OPENFSP_VALIDATOR_ATTESTATION_PUBLIC_URL: https://validator.openfsp.org
     healthcheck:
       test:
