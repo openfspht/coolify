@@ -25,16 +25,6 @@ services:
       OPENFSP_BOOTSTRAP_KEY: ${OPENFSP_DEMO_API_KEY}
       OPENFSP_CONFORMANCE_ENABLED: "true"
       SPRING_APPLICATION_JSON: '{"openfsp":{"public-base-url":"https://gateway.openfsp.org","providers":{"mock_openfsp":{"base-url":"https://simulator-api.openfsp.org/mock_openfsp"},"mock_moncash":{"base-url":"https://simulator-api.openfsp.org/mock_moncash/Api","secondary-url":"https://simulator-api.openfsp.org/mock_moncash/Moncash-middleware"},"mock_natcash":{"base-url":"https://simulator-api.openfsp.org/mock_natcash/api/online-payment"}},"webhooks":{"endpoints":{"demo-shop":{"url":"https://demo.openfsp.org/webhooks/openfsp"}}}}}'
-    healthcheck:
-      test:
-        - CMD
-        - bash
-        - -c
-        - exec 3<>/dev/tcp/127.0.0.1/8080 && printf 'GET /actuator/health HTTP/1.0\r\n\r\n' >&3 && grep -q '"status":"UP"' <&3
-      interval: 10s
-      timeout: 5s
-      retries: 5
-      start_period: 90s
     depends_on:
       postgres:
         condition: service_healthy
@@ -44,12 +34,6 @@ services:
     environment:
       SENTRY_DSN: ${SENTRY_DSN_FRONTEND}
       SENTRY_ENVIRONMENT: production
-    healthcheck:
-      test: ["CMD", "curl", "-fsS", "-o", "/dev/null", "http://127.0.0.1:8080/health"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-      start_period: 10s
     depends_on: [gateway]
 
 volumes:
