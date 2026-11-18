@@ -61,11 +61,13 @@ mounted key only. Configuring that key retires the key generated in development 
 2. Push this repository, then redeploy the `gateway` and `validator` stacks.
 3. Push [openfspht/openfsp](https://github.com/openfspht/openfsp).
 4. Merge its release pull request.
+5. Move the compose files to the new image version and push.
 
 ## Update
 
-Every stack runs the `latest` images. Coolify deploys each one from this repository: redeploy a stack to pull the images
-of a new release. A change to a compose file is deployed on push.
+Every stack runs a pinned release of the images published on Docker Hub. Coolify deploys each one from this repository
+on push: a new release reaches production when its version replaces the current one in the compose files, through a
+Dependabot pull request or by hand, and rolling back means restoring the previous version.
 
 ## License
 

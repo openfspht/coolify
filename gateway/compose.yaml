@@ -13,7 +13,7 @@ services:
       retries: 30
 
   gateway:
-    image: openfsp/gateway:latest
+    image: openfsp/gateway:0.4.0
     environment:
       SENTRY_DSN: ${SENTRY_DSN_BACKEND}
       SENTRY_ENVIRONMENT: production
@@ -33,7 +33,7 @@ services:
         condition: service_healthy
 
   console:
-    image: openfsp/console:latest
+    image: openfsp/console:0.4.0
     environment:
       SENTRY_DSN: ${SENTRY_DSN_FRONTEND}
       SENTRY_ENVIRONMENT: production
