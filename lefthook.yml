@@ -1,0 +1,15 @@
+pre-commit:
+  commands:
+    actionlint:
+      glob: ".github/workflows/*.yml"
+      run: actionlint
+pre-push:
+  commands:
+    compose:
+      run: for stack in gateway simulator validator demo; do docker compose -f "$stack/compose.yaml" config --quiet || exit 1; done
+commit-msg:
+  commands:
+    conventional:
+      run: >-
+        sed -e '/^#/d' -e '/^[[:space:]]*$/d' {1} | awk 'END { exit NR != 1 }' &&
+        sed -e '/^#/d' -e '/^[[:space:]]*$/d' {1} | grep -Eq '^(build|chore|ci|docs|feat|fix|perf|refactor|revert|style|test)(\([a-z0-9-]+\))?!?: [^[:space:]]'
