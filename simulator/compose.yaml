@@ -1,0 +1,31 @@
+services:
+  simulator:
+    image: openfsp/simulator:latest
+    environment:
+      SENTRY_DSN: ${SENTRY_DSN_BACKEND}
+      SENTRY_ENVIRONMENT: production
+      SPRING_PROFILES_ACTIVE: docker
+      SPRING_APPLICATION_JSON: '{"openfsp":{"simulator":{"public-base-url":"https://simulator-api.openfsp.org","operators":{"mock_openfsp":{"return-url":"https://gateway.openfsp.org/return/mock_openfsp"},"mock_moncash":{"return-url":"https://gateway.openfsp.org/return/mock_moncash"},"mock_natcash":{"return-url":"https://gateway.openfsp.org/return/mock_natcash"}}}}}'
+    healthcheck:
+      test:
+        - CMD
+        - bash
+        - -c
+        - exec 3<>/dev/tcp/127.0.0.1/8090 && printf 'GET /actuator/health HTTP/1.0\r\n\r\n' >&3 && grep -q '"status":"UP"' <&3
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 90s
+
+  simulator-ui:
+    image: openfsp/simulator-ui:latest
+    environment:
+      SENTRY_DSN: ${SENTRY_DSN_FRONTEND}
+      SENTRY_ENVIRONMENT: production
+    healthcheck:
+      test: ["CMD", "curl", "-fsS", "-o", "/dev/null", "http://127.0.0.1:8080/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    depends_on: [simulator]

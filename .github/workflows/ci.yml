@@ -26,7 +26,6 @@ jobs:
       SERVICE_PASSWORD_POSTGRES: ci
       OPENFSP_ADMIN_TOKEN: ci
       OPENFSP_DEMO_API_KEY: ci
-      OPENFSP_VALIDATOR_DERIVATION_KEY: ci
       SENTRY_DSN_BACKEND: ""
       SENTRY_DSN_FRONTEND: ""
       SENTRY_DSN_DEMO: ""
@@ -35,7 +34,7 @@ jobs:
         with:
           persist-credentials: false
       - run: |
-          for stack in openfsp demo; do
+          for stack in openfsp simulator validator demo; do
             docker compose -f "$stack/compose.yaml" config --quiet
             docker compose -f "$stack/compose.yaml" pull --quiet
           done

@@ -1,0 +1,56 @@
+services:
+  postgres:
+    image: postgres:18-alpine
+    environment:
+      POSTGRES_DB: openfsp
+      POSTGRES_USER: openfsp
+      POSTGRES_PASSWORD: ${SERVICE_PASSWORD_POSTGRES}
+    volumes:
+      - postgres-data:/var/lib/postgresql
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "openfsp"]
+      interval: 5s
+      retries: 30
+
+  validator:
+    image: openfsp/validator:latest
+    environment:
+      SENTRY_DSN: ${SENTRY_DSN_BACKEND}
+      SENTRY_ENVIRONMENT: production
+      SPRING_PROFILES_ACTIVE: docker
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/openfsp
+      SPRING_DATASOURCE_USERNAME: openfsp
+      SPRING_DATASOURCE_PASSWORD: ${SERVICE_PASSWORD_POSTGRES}
+      OPENFSP_VALIDATOR_DEVELOPMENT_MODE: "true"
+      OPENFSP_VALIDATOR_BEHIND_TRUSTED_PROXY: "true"
+      OPENFSP_VALIDATOR_PUBLIC_URL: https://validator.openfsp.org
+      OPENFSP_VALIDATOR_ATTESTATION_PUBLIC_URL: https://validator.openfsp.org
+    healthcheck:
+      test:
+        - CMD
+        - bash
+        - -c
+        - exec 3<>/dev/tcp/127.0.0.1/8095 && printf 'GET /actuator/health HTTP/1.0\r\n\r\n' >&3 && grep -q '"status":"UP"' <&3
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 90s
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  validator-ui:
+    image: openfsp/validator-ui:latest
+    environment:
+      SENTRY_DSN: ${SENTRY_DSN_FRONTEND}
+      SENTRY_ENVIRONMENT: production
+    healthcheck:
+      test: ["CMD", "curl", "-fsS", "-o", "/dev/null", "http://127.0.0.1:8080/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    depends_on: [validator]
+
+volumes:
+  postgres-data:

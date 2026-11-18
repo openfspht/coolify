@@ -12,24 +12,6 @@ services:
       interval: 5s
       retries: 30
 
-  simulator:
-    image: openfsp/simulator:latest
-    environment:
-      SENTRY_DSN: ${SENTRY_DSN_BACKEND}
-      SENTRY_ENVIRONMENT: production
-      SPRING_PROFILES_ACTIVE: docker
-      SPRING_APPLICATION_JSON: '{"openfsp":{"simulator":{"public-base-url":"https://simulator-api.openfsp.org","operators":{"mock_openfsp":{"return-url":"https://gateway.openfsp.org/return/mock_openfsp"},"mock_moncash":{"return-url":"https://gateway.openfsp.org/return/mock_moncash"},"mock_natcash":{"return-url":"https://gateway.openfsp.org/return/mock_natcash"}}}}}'
-    healthcheck:
-      test:
-        - CMD
-        - bash
-        - -c
-        - exec 3<>/dev/tcp/127.0.0.1/8090 && printf 'GET /actuator/health HTTP/1.0\r\n\r\n' >&3 && grep -q '"status":"UP"' <&3
-      interval: 10s
-      timeout: 5s
-      retries: 5
-      start_period: 90s
-
   gateway:
     image: openfsp/gateway:latest
     environment:
@@ -42,7 +24,7 @@ services:
       OPENFSP_ADMIN_TOKEN: ${OPENFSP_ADMIN_TOKEN}
       OPENFSP_BOOTSTRAP_KEY: ${OPENFSP_DEMO_API_KEY}
       OPENFSP_CONFORMANCE_ENABLED: "true"
-      SPRING_APPLICATION_JSON: '{"openfsp":{"public-base-url":"https://gateway.openfsp.org","providers":{"mock_moncash":{"secondary-url":"https://simulator-api.openfsp.org/mock_moncash/Moncash-middleware"}},"webhooks":{"endpoints":{"demo-shop":{"url":"https://demo.openfsp.org/webhooks/openfsp"}}}}}'
+      SPRING_APPLICATION_JSON: '{"openfsp":{"public-base-url":"https://gateway.openfsp.org","providers":{"mock_openfsp":{"base-url":"https://simulator-api.openfsp.org/mock_openfsp"},"mock_moncash":{"base-url":"https://simulator-api.openfsp.org/mock_moncash/Api","secondary-url":"https://simulator-api.openfsp.org/mock_moncash/Moncash-middleware"},"mock_natcash":{"base-url":"https://simulator-api.openfsp.org/mock_natcash/api/online-payment"}},"webhooks":{"endpoints":{"demo-shop":{"url":"https://demo.openfsp.org/webhooks/openfsp"}}}}}'
     healthcheck:
       test:
         - CMD
@@ -55,8 +37,6 @@ services:
       start_period: 90s
     depends_on:
       postgres:
-        condition: service_healthy
-      simulator:
         condition: service_healthy
 
   console:
@@ -71,63 +51,6 @@ services:
       retries: 5
       start_period: 10s
     depends_on: [gateway]
-
-  simulator-ui:
-    image: openfsp/simulator-ui:latest
-    environment:
-      SENTRY_DSN: ${SENTRY_DSN_FRONTEND}
-      SENTRY_ENVIRONMENT: production
-    healthcheck:
-      test: ["CMD", "curl", "-fsS", "-o", "/dev/null", "http://127.0.0.1:8080/health"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-      start_period: 10s
-    depends_on: [simulator]
-
-  validator:
-    image: openfsp/validator:latest
-    environment:
-      SENTRY_DSN: ${SENTRY_DSN_BACKEND}
-      SENTRY_ENVIRONMENT: production
-      SPRING_PROFILES_ACTIVE: docker
-      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/openfsp
-      SPRING_DATASOURCE_USERNAME: openfsp
-      SPRING_DATASOURCE_PASSWORD: ${SERVICE_PASSWORD_POSTGRES}
-      OPENFSP_VALIDATOR_DEVELOPMENT_MODE: "true"
-      OPENFSP_VALIDATOR_BEHIND_TRUSTED_PROXY: "true"
-      OPENFSP_VALIDATOR_SIMULATOR_DERIVATION_KEY: ${OPENFSP_VALIDATOR_DERIVATION_KEY}
-      OPENFSP_VALIDATOR_PUBLIC_URL: https://validator.openfsp.org
-      OPENFSP_VALIDATOR_SIMULATOR_PUBLIC_URL: https://simulator-api.openfsp.org
-      OPENFSP_VALIDATOR_ATTESTATION_PUBLIC_URL: https://validator.openfsp.org
-    healthcheck:
-      test:
-        - CMD
-        - bash
-        - -c
-        - exec 3<>/dev/tcp/127.0.0.1/8095 && printf 'GET /actuator/health HTTP/1.0\r\n\r\n' >&3 && grep -q '"status":"UP"' <&3
-      interval: 10s
-      timeout: 5s
-      retries: 5
-      start_period: 90s
-    depends_on:
-      postgres:
-        condition: service_healthy
-      simulator:
-        condition: service_healthy
-
-  validator-ui:
-    image: openfsp/validator-ui:latest
-    environment:
-      SENTRY_DSN: ${SENTRY_DSN_FRONTEND}
-      SENTRY_ENVIRONMENT: production
-    healthcheck:
-      test: ["CMD", "curl", "-fsS", "-o", "/dev/null", "http://127.0.0.1:8080/health"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-      start_period: 10s
-    depends_on: [validator]
 
 volumes:
   postgres-data:
