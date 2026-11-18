@@ -17,7 +17,9 @@ services:
     environment:
       SENTRY_DSN: ${SENTRY_DSN_BACKEND}
       SENTRY_ENVIRONMENT: production
-      SPRING_PROFILES_ACTIVE: development,docker
+      SPRING_PROFILES_ACTIVE: production
+      OPENFSP_ENVIRONMENT: test
+      OPENFSP_TLS_TERMINATED_BY_PROXY: "true"
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/openfsp
       SPRING_DATASOURCE_USERNAME: openfsp
       SPRING_DATASOURCE_PASSWORD: ${SERVICE_PASSWORD_POSTGRES}
@@ -25,7 +27,7 @@ services:
       OPENFSP_APP_KEY: ${OPENFSP_APP_KEY}
       OPENFSP_BOOTSTRAP_KEY: ${OPENFSP_DEMO_API_KEY}
       OPENFSP_CONFORMANCE_ENABLED: "true"
-      SPRING_APPLICATION_JSON: '{"openfsp":{"public-base-url":"https://gateway.openfsp.org","providers":{"mock_openfsp":{"base-url":"https://simulator-api.openfsp.org/mock_openfsp"},"mock_moncash":{"base-url":"https://simulator-api.openfsp.org/mock_moncash/Api","secondary-url":"https://simulator-api.openfsp.org/mock_moncash/Moncash-middleware"},"mock_natcash":{"base-url":"https://simulator-api.openfsp.org/mock_natcash/api/online-payment"}},"webhooks":{"endpoints":{"demo-shop":{"url":"https://demo.openfsp.org/webhooks/openfsp"}}}}}'
+      SPRING_APPLICATION_JSON: '{"openfsp":{"public-base-url":"https://gateway.openfsp.org","providers":{"mock_openfsp":{"type":"openfsp","logo-url":"https://cdn.openfsp.org/logo/openfsp-logo.svg","base-url":"https://simulator-api.openfsp.org/mock_openfsp","api-key":"ofsp_test_MockOpenFspKeyPublishedForTheSimulator"},"mock_moncash":{"type":"moncash","display-name":"MonCash (mock)","logo-url":"https://digicelmoncash.com/qrcode/images/logo.png","base-url":"https://simulator-api.openfsp.org/mock_moncash/Api","secondary-url":"https://simulator-api.openfsp.org/mock_moncash/Moncash-middleware","credentials":{"client-id":"mock_moncash_client_id","client-secret":"mock_moncash_client_secret"}},"mock_natcash":{"type":"natcash","display-name":"NatCash (mock)","logo-url":"https://testmerchantpay.natcom.com.ht/merchant/_next/static/images/logo-1689408a84fe0c46831e7ae2d19fe04c.png","base-url":"https://simulator-api.openfsp.org/mock_natcash/api/online-payment","limits":{"min-amount":1000,"max-amount":10000000,"amount-step":100},"credentials":{"username":"mock_natcash_user","password":"mock_natcash_password","partner-code":"MOCKNATCASH","private-key":"mock_natcash_private_key","function-code":"mock_natcash_function_code"}}},"webhooks":{"endpoints":{"demo-shop":{"url":"https://demo.openfsp.org/webhooks/openfsp","events":["payment.created","payment.succeeded","payment.failed","payment.expired","payment.canceled"],"enabled":true}}}}}'
     depends_on:
       postgres:
         condition: service_healthy

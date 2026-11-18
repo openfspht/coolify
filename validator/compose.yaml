@@ -21,10 +21,12 @@ services:
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/openfsp
       SPRING_DATASOURCE_USERNAME: openfsp
       SPRING_DATASOURCE_PASSWORD: ${SERVICE_PASSWORD_POSTGRES}
-      OPENFSP_VALIDATOR_DEVELOPMENT_MODE: "true"
       OPENFSP_VALIDATOR_BEHIND_TRUSTED_PROXY: "true"
       OPENFSP_VALIDATOR_PUBLIC_URL: https://validator.openfsp.org
       OPENFSP_VALIDATOR_ATTESTATION_PUBLIC_URL: https://validator.openfsp.org
+      OPENFSP_VALIDATOR_ATTESTATION_SIGNING_KEY_PRIVATE_KEY_FILE: /run/secrets/attestation-signing-key
+    secrets:
+      - attestation-signing-key
     depends_on:
       postgres:
         condition: service_healthy
@@ -38,3 +40,7 @@ services:
 
 volumes:
   postgres-data:
+
+secrets:
+  attestation-signing-key:
+    environment: OPENFSP_VALIDATOR_ATTESTATION_SIGNING_KEY
