@@ -8,7 +8,9 @@ updates:
       default-days: 7
   - package-ecosystem: docker-compose
     directories:
-      - /openfsp
+      - /gateway
+      - /simulator
+      - /validator
       - /demo
     schedule:
       interval: weekly
