@@ -34,7 +34,7 @@ jobs:
         with:
           persist-credentials: false
       - run: |
-          for stack in openfsp simulator validator demo; do
+          for stack in gateway simulator validator demo; do
             docker compose -f "$stack/compose.yaml" config --quiet
             docker compose -f "$stack/compose.yaml" pull --quiet
           done
