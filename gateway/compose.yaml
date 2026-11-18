@@ -22,6 +22,7 @@ services:
       SPRING_DATASOURCE_USERNAME: openfsp
       SPRING_DATASOURCE_PASSWORD: ${SERVICE_PASSWORD_POSTGRES}
       OPENFSP_ADMIN_TOKEN: ${OPENFSP_ADMIN_TOKEN}
+      OPENFSP_APP_KEY: ${OPENFSP_APP_KEY}
       OPENFSP_BOOTSTRAP_KEY: ${OPENFSP_DEMO_API_KEY}
       OPENFSP_CONFORMANCE_ENABLED: "true"
       SPRING_APPLICATION_JSON: '{"openfsp":{"public-base-url":"https://gateway.openfsp.org","providers":{"mock_openfsp":{"base-url":"https://simulator-api.openfsp.org/mock_openfsp"},"mock_moncash":{"base-url":"https://simulator-api.openfsp.org/mock_moncash/Api","secondary-url":"https://simulator-api.openfsp.org/mock_moncash/Moncash-middleware"},"mock_natcash":{"base-url":"https://simulator-api.openfsp.org/mock_natcash/api/online-payment"}},"webhooks":{"endpoints":{"demo-shop":{"url":"https://demo.openfsp.org/webhooks/openfsp"}}}}}'
