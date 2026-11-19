@@ -10,6 +10,7 @@ services:
   simulator-ui:
     image: openfsp/simulator-ui:0.4.0
     environment:
+      SIMULATOR_CONTROL_KEY: ofsp_test_MockOpenFspKeyPublishedForTheSimulator
       SENTRY_DSN: ${SENTRY_DSN_FRONTEND}
       SENTRY_ENVIRONMENT: production
     depends_on: [simulator]
