@@ -1,16 +1,11 @@
 services:
   simulator:
-    image: ghcr.io/openfspht/simulator:0.4.0
+    image: ghcr.io/openfspht/simulator:0.5.0
     environment:
       SENTRY_DSN: ${SENTRY_DSN_BACKEND}
       SENTRY_ENVIRONMENT: production
       SPRING_PROFILES_ACTIVE: docker
-      SPRING_APPLICATION_JSON: '{"openfsp":{"simulator":{"public-base-url":"https://simulator-api.openfsp.org","operators":{"mock_openfsp":{"return-url":"https://gateway.openfsp.org/return/mock_openfsp"},"mock_moncash":{"return-url":"https://gateway.openfsp.org/return/mock_moncash","webhook-url":"https://gateway.openfsp.org/callbacks/mock_moncash"},"mock_natcash":{"return-url":"https://gateway.openfsp.org/return/mock_natcash"}}}}}'
-
-  simulator-ui:
-    image: ghcr.io/openfspht/simulator-ui:0.4.0
-    environment:
       SIMULATOR_CONTROL_KEY: ofsp_test_MockOpenFspKeyPublishedForTheSimulator
-      SENTRY_DSN: ${SENTRY_DSN_FRONTEND}
-      SENTRY_ENVIRONMENT: production
-    depends_on: [simulator]
+      OPENFSP_UI_SENTRY_DSN: ${SENTRY_DSN_FRONTEND}
+      OPENFSP_UI_SENTRY_ENVIRONMENT: production
+      SPRING_APPLICATION_JSON: '{"openfsp":{"simulator":{"public-base-url":"https://simulator-api.openfsp.org","operators":{"mock_openfsp":{"return-url":"https://gateway.openfsp.org/return/mock_openfsp"},"mock_moncash":{"return-url":"https://gateway.openfsp.org/return/mock_moncash","webhook-url":"https://gateway.openfsp.org/callbacks/mock_moncash"},"mock_natcash":{"return-url":"https://gateway.openfsp.org/return/mock_natcash"}}}}}'
