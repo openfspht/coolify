@@ -3,7 +3,7 @@ services:
     image: ghcr.io/openfspht/demo:0.3.0
     environment:
       OPENFSP_BASE_URL: https://gateway.openfsp.org
-      OPENFSP_API_KEY: ${OPENFSP_DEMO_API_KEY}
+      OPENFSP_API_KEY: ofsp_test_DemoShopKeyPublishedForTheSimulator01
       SHOP_WEBHOOK_URL: https://demo.openfsp.org/webhooks/openfsp
       SHOP_PUBLIC_URL: https://demo.openfsp.org
       SENTRY_DSN: ${SENTRY_DSN_DEMO}

@@ -24,9 +24,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       SERVICE_PASSWORD_POSTGRES: ci
-      OPENFSP_ADMIN_TOKEN: ci
       OPENFSP_APP_KEY: ci
-      OPENFSP_DEMO_API_KEY: ci
       OPENFSP_VALIDATOR_ATTESTATION_SIGNING_KEY: ci
       SENTRY_DSN_BACKEND: ""
       SENTRY_DSN_FRONTEND: ""
