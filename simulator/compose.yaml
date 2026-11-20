@@ -4,8 +4,8 @@ services:
     environment:
       SENTRY_DSN: ${SENTRY_DSN_BACKEND}
       SENTRY_ENVIRONMENT: production
-      SPRING_PROFILES_ACTIVE: docker
       SIMULATOR_CONTROL_KEY: ofsp_test_MockOpenFspKeyPublishedForTheSimulator
       OPENFSP_UI_SENTRY_DSN: ${SENTRY_DSN_FRONTEND}
       OPENFSP_UI_SENTRY_ENVIRONMENT: production
-      SPRING_APPLICATION_JSON: '{"openfsp":{"simulator":{"public-base-url":"https://simulator-api.openfsp.org","operators":{"mock_openfsp":{"return-url":"https://gateway.openfsp.org/return/mock_openfsp"},"mock_moncash":{"return-url":"https://gateway.openfsp.org/return/mock_moncash","webhook-url":"https://gateway.openfsp.org/callbacks/mock_moncash"},"mock_natcash":{"return-url":"https://gateway.openfsp.org/return/mock_natcash"}}}}}'
+      OPENFSP_SIMULATOR_URL: https://simulator-api.openfsp.org
+      OPENFSP_GATEWAY_URL: https://gateway.openfsp.org
