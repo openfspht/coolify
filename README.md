@@ -35,8 +35,7 @@ The gateway serves the `test` environment and reaches simulated payment services
 Coolify maps each address to its service on its container port: `8080` for the gateway, `8090` for the simulator, `8095`
 for the validator. The addresses are `A` records of the `openfsp.org` zone. The gateway serves the console and `/admin`
 on `console.openfsp.org` only (`OPENFSP_ADMIN_HOST`) and answers 404 for them on `gateway.openfsp.org`. The simulator
-interface reaches the control interface with the published `mock_openfsp` key of `SIMULATOR_CONTROL_KEY`, which stays on
-the server.
+interface acts as the published `mock_openfsp` account, whose key stays on the server.
 
 ## Variables
 
