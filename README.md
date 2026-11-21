@@ -67,7 +67,7 @@ mounted key only. Configuring that key retires the key generated in development 
 
 ## Update
 
-Every stack runs a pinned release of the images published on GitHub Container Registry (`ghcr.io/openfspht`), mirrored on Docker Hub (`openfsp`). Coolify deploys each one from this repository
+Every stack runs a pinned release of the images published on Docker Hub (`openfsp`), mirrored from GitHub Container Registry (`ghcr.io/openfspht`). Coolify deploys each one from this repository
 on push: a new release reaches production when its version replaces the current one in the compose files, through a
 Dependabot pull request or by hand, and rolling back means restoring the previous version.
 

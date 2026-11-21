@@ -13,7 +13,7 @@ services:
       retries: 30
 
   validator:
-    image: ghcr.io/openfspht/validator:0.5.0
+    image: openfsp/validator:0.5.0
     environment:
       SENTRY_DSN: ${SENTRY_DSN_BACKEND}
       SENTRY_ENVIRONMENT: production
