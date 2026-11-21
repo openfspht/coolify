@@ -6,7 +6,7 @@ services:
       POSTGRES_USER: openfsp
       POSTGRES_PASSWORD: ${SERVICE_PASSWORD_POSTGRES}
     volumes:
-      - postgres-data:/var/lib/postgresql
+      - postgres-v1:/var/lib/postgresql
     healthcheck:
       test: ["CMD", "pg_isready", "-U", "openfsp"]
       interval: 5s
@@ -35,4 +35,4 @@ services:
         condition: service_healthy
 
 volumes:
-  postgres-data:
+  postgres-v1:
