@@ -29,7 +29,7 @@ The gateway serves the `test` environment and reaches simulated payment services
 | `gateway` | `gateway` | https://gateway.openfsp.org, https://console.openfsp.org |
 | `postgres` | `gateway` | internal |
 | `simulator` | `simulator` | https://simulator.openfsp.org |
-| `validator` | `validator` | https://validator.openfsp.org |
+| `validator` | `validator` | https://validator.openfsp.org, https://l.openfsp.org (attestation short links) |
 | `postgres` | `validator` | internal |
 
 Coolify maps each address to its service on its container port: `8080` for the gateway, `8090` for the simulator, `8095`
