@@ -29,7 +29,7 @@ services:
       OPENFSP_CONFORMANCE_ENABLED: "true"
       SPRING_PROFILES_ACTIVE: simulated,demo
       OPENFSP_PUBLIC_BASE_URL: https://gateway.openfsp.org
-      OPENFSP_SIMULATOR_URL: https://simulator-api.openfsp.org
+      OPENFSP_SIMULATOR_URL: https://simulator.openfsp.org
     depends_on:
       postgres:
         condition: service_healthy

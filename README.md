@@ -13,7 +13,7 @@ Four compose files describe the demonstration environment served under `openfsp.
 [Coolify](https://coolify.io) service and reaches the others over their public addresses only:
 
 - [`gateway/compose.yaml`](gateway/compose.yaml): the gateway, which serves its console.
-- [`simulator/compose.yaml`](simulator/compose.yaml): the simulator of the MonCash, NatCash and OpenFSP operators, which
+- [`simulator/compose.yaml`](simulator/compose.yaml): the simulator of the MonCash, NatCash and OpenFSP providers, which
   serves its interface.
 - [`validator/compose.yaml`](validator/compose.yaml): the conformance validator, which serves its interface.
 - [`demo/compose.yaml`](demo/compose.yaml): the demonstration shop of [openfspht/demo](https://github.com/openfspht/demo).
@@ -28,14 +28,15 @@ The gateway serves the `test` environment and reaches simulated payment services
 | `shop` | `demo` | https://demo.openfsp.org |
 | `gateway` | `gateway` | https://gateway.openfsp.org, https://console.openfsp.org |
 | `postgres` | `gateway` | internal |
-| `simulator` | `simulator` | https://simulator-api.openfsp.org, https://simulator.openfsp.org |
+| `simulator` | `simulator` | https://simulator.openfsp.org |
 | `validator` | `validator` | https://validator.openfsp.org |
 | `postgres` | `validator` | internal |
 
 Coolify maps each address to its service on its container port: `8080` for the gateway, `8090` for the simulator, `8095`
 for the validator. The addresses are `A` records of the `openfsp.org` zone. The gateway serves the console and `/admin`
 on `console.openfsp.org` only (`OPENFSP_ADMIN_HOST`) and answers 404 for them on `gateway.openfsp.org`. The simulator
-interface acts as the published `mock_openfsp` account, whose key stays on the server.
+interface and its API share `simulator.openfsp.org`; the interface acts as the published `mock_openfsp` account, whose key
+stays on the server.
 
 ## Variables
 
