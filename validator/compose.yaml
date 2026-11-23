@@ -1,25 +1,12 @@
 services:
-  postgres:
-    image: postgres:18-alpine
-    environment:
-      POSTGRES_DB: openfsp
-      POSTGRES_USER: openfsp
-      POSTGRES_PASSWORD: ${SERVICE_PASSWORD_POSTGRES}
-    volumes:
-      - postgres-v1:/var/lib/postgresql
-    healthcheck:
-      test: ["CMD", "pg_isready", "-U", "openfsp"]
-      interval: 5s
-      retries: 30
-
   validator:
     image: openfsp/validator:0.6.0
     environment:
       SENTRY_DSN: ${SENTRY_DSN_BACKEND}
       SENTRY_ENVIRONMENT: production
-      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/openfsp
-      SPRING_DATASOURCE_USERNAME: openfsp
-      SPRING_DATASOURCE_PASSWORD: ${SERVICE_PASSWORD_POSTGRES}
+      SPRING_DATASOURCE_URL: ${DATABASE_URL}
+      SPRING_DATASOURCE_USERNAME: ${DATABASE_USERNAME}
+      SPRING_DATASOURCE_PASSWORD: ${DATABASE_PASSWORD}
       OPENFSP_VALIDATOR_BEHIND_TRUSTED_PROXY: "true"
       OPENFSP_VALIDATOR_PUBLIC_URL: https://validator.openfsp.org
       OPENFSP_VALIDATOR_SHORT_URL: https://l.openfsp.org
@@ -28,12 +15,6 @@ services:
       OPENFSP_UI_SENTRY_ENVIRONMENT: production
     secrets:
       - attestation-signing-key
-    depends_on:
-      postgres:
-        condition: service_healthy
-
-volumes:
-  postgres-v1:
 
 secrets:
   attestation-signing-key:
