@@ -45,7 +45,7 @@ These values are set on the Coolify services and never committed. Every one of t
 | `DATABASE_URL` | `gateway`, `validator` | JDBC URL of the service database on the `openfsp-postgres-production` Coolify instance |
 | `DATABASE_USERNAME`, `DATABASE_PASSWORD` | `gateway`, `validator` | Role of that database, one per service |
 | `OPENFSP_APP_KEY` | `gateway` | Application key, `openssl rand -base64 32`, kept stable: replacing it signs out administrators, makes the stored merchant credentials and webhook signing keys unreadable and invalidates the callback URLs of pending payments |
-| `OPENFSP_TRUSTED_PROXIES` | `gateway` | Address of the Traefik container on the Coolify network, the only peer whose forwarded headers are read; without it every client shares the proxy address in the rate limits |
+| `OPENFSP_TRUSTED_PROXIES` | `gateway` | CIDR block of the gateway network, where Traefik is the only other peer and the only one whose forwarded headers are read; without it every client shares the proxy address in the rate limits |
 | `OPENFSP_VALIDATOR_ATTESTATION_SIGNING_KEY` | `validator` | Ed25519 private key in PKCS#8 PEM that signs the attestations, `openssl genpkey -algorithm ed25519`, mounted as a file |
 | `SENTRY_DSN_BACKEND`, `SENTRY_DSN_FRONTEND` | `gateway`, `simulator`, `validator` | Sentry DSN of the services and of their interfaces (`OPENFSP_UI_SENTRY_DSN`) |
 | `SENTRY_DSN_DEMO` | `demo` | Sentry DSN of the shop |
