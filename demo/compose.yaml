@@ -1,6 +1,6 @@
 services:
   shop:
-    image: openfsp/demo:0.3.1
+    image: openfsp/demo:0.3.2
     environment:
       OPENFSP_BASE_URL: https://gateway.openfsp.org
       OPENFSP_API_KEY: ofsp_test_DemoShopKeyPublishedForTheSimulator01
