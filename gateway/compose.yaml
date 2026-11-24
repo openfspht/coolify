@@ -17,3 +17,5 @@ services:
       SPRING_PROFILES_ACTIVE: simulated,demo
       OPENFSP_PUBLIC_BASE_URL: https://gateway.openfsp.org
       OPENFSP_SIMULATOR_URL: https://simulator.openfsp.org
+      OPENFSP_WEBHOOKS_ENDPOINTS_DEMOSHOP_URL: https://demo.openfsp.org/webhooks/openfsp
+      OPENFSP_WEBHOOKS_ENDPOINTS_DEMOSHOP_EVENTS: payment.created,payment.succeeded,payment.failed,payment.expired,payment.canceled
